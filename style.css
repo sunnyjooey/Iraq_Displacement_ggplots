@@ -1,30 +1,19 @@
 /* Headers */
 h1.title {
   font-family: Garamond;
-  font-style: bold;
-  font-size: 20pt;
+  font-weight: bold;
+  font-size: 30pt;
 }
 
-h1.author {
-  font-family: Garamond;
-  font-style: italic;
-  font-size: 12pt;
-}
-
-h1.date {
-  font-family: Garamond;
-  font-style: italic;
-  font-size: 12pt;
-}
 
 h1 {
   font-family: Garamond;
-  font-style: bold;
-  font-size: 14pt;
+  font-weight: bold;
+  font-size: 20pt;
 }
 
 /* Whole document: */
 body {
   font-family: Garamond;
-  font-size: 12pt;
+  font-size: 14pt;
 }

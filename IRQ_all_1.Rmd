@@ -2,7 +2,7 @@
 title: "Iraq Displacement Crisis, 2014 to the Present"
 author: "Sun-joo Lee"
 date: "December 11, 2017"
-output: 
+output:
   html_document:
     css: style.css
 ---
@@ -11,8 +11,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
 # Humanitarian Crisis in Iraq
-The humanitarian crisis in Iraq has raged on since the ISIS insurgency in 2014, and is expected to continue until the country stabilizes. Millions of people remain displaced for years and thousands are searching for new homes abroad. However, international assistance and intervention remains intermittent; international funding for the crisis lags behind at about half of the requirements, and processing of refugee applications remains very slow. This brief report will represent the some of the key aspects of the humanitarian crisis in several graphs. 
+The humanitarian crisis in Iraq has raged on since the ISIS insurgency in 2014, and is expected to continue until the country stabilizes. Millions of people remain displaced for years and thousands are searching for new homes abroad. However, international assistance and intervention remains intermittent; international funding for the crisis lags behind at about half of the requirements, and processing of refugee applications remains very slow. This brief report will represent the some of the key aspects of the humanitarian crisis in several graphs.  
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -41,10 +42,12 @@ ThemeMain <- theme(text=element_text(family="Garamond"),
                  axis.text.x = element_text(angle = 45, hjust = 1),
                  plot.title = element_text(face="bold", size=18),
                  axis.title.y = element_text(size = 10,face="bold"),
-                 axis.title.x = element_text(size = 10, face="bold"))
-```
+                 axis.title.x = element_text(size = 10, face="bold"))  
+```  
 
-# Yearly Trends by Governorate of Internally Displaced People 
+
+
+# Yearly Trends by Governorate of Internally Displaced People  
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ########### GRAPH 1: facet wrap by governorate of IDPs in and out 
@@ -96,16 +99,18 @@ ggplot(date_concat) +
   theme_light() +
   ThemeMain +
   scale_y_continuous(labels = formatter1000) +
-  labs(title = "Internal movement highest in the west and in Kurdish regions",
+  labs(title = "Internal movement highest in the west and Kurdish regions",
        subtitle = "Volatile western governorates experienced large inflow and outflow of IDPs, \nwhile Kurdish regions have only continued to see a large inflow of people",
        x = "Year", y = "Total Inflow and Outflow of People (in Thousands)",
-       caption = 'Data from IOM (Iraq Mission)')
-```
+       caption = 'Data from IOM (Iraq Mission)')  
+```  
 
 The crisis has affected people in some governorates more than others. The most affected governorates are Anbar and Ninewa, which border Syria. Both governorates have seen the most outflow and significant inflow over the years, with Ninewa experiencing a recent surge of inflowing IDPs after the liberation of Mosul. The relatively stable Kurdish governorates, Dahuk and Erbil, have seen a steady inflow and little outflow of IDPs, as is the case with the capital, Baghdad. Most of the southern governorates have remained stable throughout the crisis.
 
 
-# Number of IDPs by Governorate
+
+# Number of IDPs by Governorate  
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide',fig.keep='all'}
 ########### MAP 1: IDP by governorate 
 #Province boundaries
@@ -170,12 +175,14 @@ ggplot() +
   labs(title = "Most IDPs are in Ninewa and northern governorates",
        subtitle = "Over one million IDPs in Ninewa after the liberation of Mosul",
        caption = 'Data from IOM (Iraq Mission), as of September 2017') +
-  coord_equal()
-```
+  coord_equal()  
+```  
+
 Ninewa governorate, where Mosul (the former capital of the Iraqi branch of ISIS) is located, currently has over a million IDPs. This has been the case since Mosul's liberation in mid-2017. Baghdad, Kirkuk, Salah al-Din and the Kurdish governorates of Dahuk and Erbil have hosted a large number of IDPs throughout the crisis and continues to do so to the present. 
 
 
-# IDPs' Types of Residence
+
+# IDPs' Types of Residence  
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ############# GRAPH 2: Most recent figures by governorate and shelter type 
@@ -207,14 +214,14 @@ ggplot(recent_res, aes(x=Governorate, y=Total, fill=Type)) +
   labs(title = "Most in Ninewa live in camps or unknown types of housing",
        subtitle = "In contrast, majority in stable areas live in rented spaces or with host communities",
        x = "Governorate", y = "Total Number of People (in Thousands)",
-       caption = 'Data from IOM (Iraq Mission), as of September 2017') 
-```
+       caption = 'Data from IOM (Iraq Mission), as of September 2017')  
+```  
 
 IDPs live in different types of residences, depending on their situation. The overwhelming majority of the newly displaced people in Ninewa governorate live in camps or in an unknown housing type. Nearby Dahuk also has a sizeable camp population. In many of the more stable governorates, such as Erbil, Kirkuk, and Sulaymaniyah, IDPs live in rented homes or with host communities.  
 
 
 
-# The Geographical Spread of IDPs
+# The Geographical Spread of IDPs  
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ############## MAP 2: camps and non-camps 
@@ -256,14 +263,15 @@ ggplot() +
        caption = 'Data from IOM (Iraq Mission), as of September 2017') +
   scale_size_continuous(name='People (in millions)', breaks = c(500000, 2000000, 3500000, 5000000),
                         labels = c(".5","2","3.5","5")) +
-  coord_equal()
-```
+  coord_equal()  
+```  
+
 The yellow and blue dots show where IDPs reside, and cities of over half a million people are depicted in red. Non-camp IDPs are spread out over the country, while camps are near (but not usually in) large cities. 
 
 
 
+# Population Density in the Camps  
 
-# Population Density in the Camps
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ########## GRAPH 3: Most recent figures of size and density of camps by governorate 
 setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
@@ -295,84 +303,29 @@ ggplot(data=dat.gg2, aes(x,y)) +
   coord_equal() +
   labs(title = "The most populated camps are also the most crowded",
        subtitle = "Camps in Ninewa and Dahuk have the most IDPs (size of circle) and are the most crowded (shade of circle)",
-       caption = 'Data from IOM (Iraq Mission), as of September 2017')
-```
+       caption = 'Data from IOM (Iraq Mission), as of September 2017')  
+```  
 
 Conditions in IDP camps can vary greatly. Places with the greatest number of IDPs living in camps also tend to have the densest camps. Again, Ninewa has the largest number of people living in camps, with the average density at fifteen-thousand people per camp. Dahuk and Anbar also have a sizeable camp population, with over ten-thousand people per camp. Other governorates have a much smaller number of people in camps, which tend to be much less crowded. 
 
 
-# Humanitarian Funding in Iraq
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-############## GRAPH 4: Funding Situation 
-setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
-funds_in <- read_csv('HW3/Funding/fts_funding_cluster_irq.csv')
-funds_need <- read_csv('HW3/Funding/fts_funding_requirements_irq.csv')
 
-funds_need$`Funding Requirements` <- 'Unmet'
+# Humanitarian Funding in Iraq  
+![](graph4_.PNG)
 
-funds <- funds_in %>% 
-  group_by(name, clusterName) %>%
-  summarize(`Total Funding` = sum(totalFunding)) %>%
-  filter(name != 'Iraq 2017')
-
-colnames(funds) <- c('Year', 'Funding Cluster', 'Total Funding')
-
-format_mill <- function(x){x/1000000}
-
-ggplot() +
-  geom_bar(data=funds_need %>%
-             filter(name !='Iraq 2017'), aes(x=name, y=revisedRequirements, color=`Funding Requirements`),
-           stat='Identity', fill = 'grey', alpha=.8) +
-  geom_bar(data=funds, aes(x=Year, y=`Total Funding`, fill=`Funding Cluster`), stat = "Identity", size=0) +
-  scale_fill_manual(values = c("#35274A","#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00","#96190E")) +
-  scale_y_continuous(labels = format_mill) +
-  ThemeMain +
-  labs(title = "Funding remains at half of what is needed",
-       subtitle = "Most funds go toward emergency needs, little go toward long-term nation-building",
-       x = "Year", y = "Total Funds (in Millions of USD)",
-       caption = 'Data from OCHA (Financial Tracking Service)')
-```
 International funding remained at about half of the needs over the years. Much of the funds go toward emergency needs, such as shelter and non-food items, every year. A steady stream of funds also go to health, protection, and sanitation each year. Unfortunately, education remains underfunded. 
 
 
 
-# From IDP to Returnee
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-########## GRAPH 5: Returnees  
-setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
-irq_return <- read_csv('HW3/irq_returnee_master.csv')
-irq_return $Date <- as.Date(irq_return $Date , "%b-%d-%Y")
+# From IDP to Returnee  
+![](graph5_.PNG)
 
-date_return <- irq_return %>%
-  group_by(Date, Governorate) %>%
-  summarise(total_ret = sum(Individuals))
-
-date_return_tot <- date_return %>%
-  group_by(Date) %>%
-  summarise(total_ret = sum(total_ret), Governorate = 'Total')
-
-returnees <- bind_rows(date_return,date_return_tot)
-
-#graph
-g <- ggplot() +
-  geom_line(data = returnees %>%
-              filter(Governorate != 'Erbil' & Governorate != 'Kirkuk'), 
-            aes(x=Date, y=total_ret, color=Governorate), size=.8) + 
-  scale_color_manual(values = c("#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00","#B40F20")) +
-  scale_y_continuous(labels = formatter1000) +
-  ThemeMain +
-  labs(title = "Millions return home as the country is retaken from ISIS",
-       subtitle = "Early crisis areas Anbar and Salah al-Din see the most returnees",
-       x = "Year - Month", y = "Total Number of People (in Thousands)",
-       caption = 'Data from IOM (Iraq Mission)')
-
-direct.label(g, list(last.points, hjust = 1, vjust = 0))
-```
 As parts of Iraq are liberated from ISIS control and are stablized, many IDPs are returning home. A small number of people began to return home as early as mid-2015, while the pace increased after mid-2016. Most of the current returnees are heading to Abar, which is where most of the earlier displacement had happened in 2014-15.
 
 
 
-# Iraqi Refugees Around the World
+# Iraqi Refugees Around the World  
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ########## GRAPH 6: Refugee Situation 
 setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
@@ -419,11 +372,14 @@ ggplot(irq_ref_all, aes(area = Total_refugees, fill = `Destination type`, label 
   theme(plot.title = element_text(face="bold", size=16)) +
   labs(title = "Iraqi refugees are concentrated in several key countries",
      subtitle = "80% of Iraqi refugees reside in 10 key countries in Europe and the Middle East, \nwhile less than 5% live in the US, UK, and Canada",
-     caption = 'Data from UNHCR (Population Statistics), as of 2016')
-```
+     caption = 'Data from UNHCR (Population Statistics), as of 2016')  
+```  
+
 Over 250,000 of the 310,000 Iraqi refugees around the world reside in 10 key countries in Europe and the Middle East. Germany and Turkey, in particular, host an increasingly large number of Iraqi refugees. In contrast, world powers that are further away from the crisis host comparitively fewer refugees; the US, UK, and Canada together host only 12,000 as of 2016.
 
+
+
+
+
+
   
-
-
-

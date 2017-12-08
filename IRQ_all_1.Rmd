@@ -1,16 +1,18 @@
 ---
 title: "Iraq Displacement Crisis, 2014 to the Present"
 author: "Sun-joo Lee"
-date: "October 29, 2017"
-output: html_document
+date: "December 11, 2017"
+output: 
+  html_document:
+    css: style.css
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Humanitarian Crisis in Iraq
-The humanitarian crisis in Iraq has raged on since the ISIS insurgency in 2014, and millions of people remain displaced for years and thousands are searching for new homes abroad. However, international assistance and intervention remains intermittent; international funding for the crisis lags behind at about half of the requirements, and processing of refugee applications remains very slow. This brief report will represent the some of the key aspects of the crisis in several graphs. 
+# Humanitarian Crisis in Iraq
+The humanitarian crisis in Iraq has raged on since the ISIS insurgency in 2014, and is expected to continue until the country stabilizes. Millions of people remain displaced for years and thousands are searching for new homes abroad. However, international assistance and intervention remains intermittent; international funding for the crisis lags behind at about half of the requirements, and processing of refugee applications remains very slow. This brief report will represent the some of the key aspects of the humanitarian crisis in several graphs. 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -42,7 +44,7 @@ ThemeMain <- theme(text=element_text(family="Garamond"),
                  axis.title.x = element_text(size = 10, face="bold"))
 ```
 
-## Trends by Governorate of Internally Displaced People 
+# Yearly Trends by Governorate of Internally Displaced People 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ########### GRAPH 1: facet wrap by governorate of IDPs in and out 
@@ -94,16 +96,16 @@ ggplot(date_concat) +
   theme_light() +
   ThemeMain +
   scale_y_continuous(labels = formatter1000) +
-  labs(title = "Internal Movement in Iraq, 2014 - 2017",
-       subtitle = "Number of people entering and exiting each governorate since the beginning of the crisis in 2014. \nMovement is highest in the West and in the Kurdish regions throughout the years.",
+  labs(title = "Internal movement highest in the west and in Kurdish regions",
+       subtitle = "Volatile western governorates experienced large inflow and outflow of IDPs, \nwhile Kurdish regions have only continued to see a large inflow of people",
        x = "Year", y = "Total Inflow and Outflow of People (in Thousands)",
        caption = 'Data from IOM (Iraq Mission)')
 ```
 
-It is clear from this graph that some governorates have experienced more displacement than others. The most affected governorates are Anbar and Ninewa, which border Syria. Both governorates have seen the most outflow and significant inflow over the years, with Ninewa experiencing a recent surge of inflowing IDPs after the liberation of Mosul. The relatively stable Kurdish governorates, Dahuk and Erbil, have seen a steady inflow and little outflow of IDPs, as is the case with the capital, Baghdad. Most of the southern governorates have remained stable throughout the crisis.
+The crisis has affected people in some governorates more than others. The most affected governorates are Anbar and Ninewa, which border Syria. Both governorates have seen the most outflow and significant inflow over the years, with Ninewa experiencing a recent surge of inflowing IDPs after the liberation of Mosul. The relatively stable Kurdish governorates, Dahuk and Erbil, have seen a steady inflow and little outflow of IDPs, as is the case with the capital, Baghdad. Most of the southern governorates have remained stable throughout the crisis.
 
 
-## Governorates with the Most IDPs
+# Number of IDPs by Governorate
 ```{r echo=FALSE, message=FALSE, warning=FALSE, results='hide',fig.keep='all'}
 ########### MAP 1: IDP by governorate 
 #Province boundaries
@@ -154,9 +156,8 @@ ggplot() +
                          breaks = c(1000000, 750000, 500000, 250000),
                          labels = c("1000", "750", "500", "250"),
                         low = "goldenrod1", high = "firebrick") +
-  geom_text(data=cnames %>%
-              filter(Governorate %in% c("Dahuk", "Kirkuk", "Erbil", "Ninewa", "Salah al-Din", "Baghdad", "Sulaymaniyah", "Diyala", "Anbar")), 
-            aes(long, lat, label = Governorate), size=4, family='Garamond') +
+  geom_text(data=cnames, 
+            aes(long, lat, label = Governorate), size=2.5, family='Garamond') +
   theme(text=element_text(family="Garamond"),
         panel.background = element_rect(fill = "white"),
         axis.ticks.x = element_blank(),
@@ -166,26 +167,26 @@ ggplot() +
         plot.title = element_text(face="bold", size=18),
         axis.title.y = element_blank(),
         axis.title.x = element_blank()) +
-  labs(title = "Number of IDPs by Governorate",
-       subtitle = "The number of IDPs is highest in Ninewa and the northern governorates after the liberation of Mosul \n(as of September 2017).",
-       caption = 'Data from IOM (Iraq Mission)') +
+  labs(title = "Most IDPs are in Ninewa and northern governorates",
+       subtitle = "Over one million IDPs in Ninewa after the liberation of Mosul",
+       caption = 'Data from IOM (Iraq Mission), as of September 2017') +
   coord_equal()
 ```
 Ninewa governorate, where Mosul (the former capital of the Iraqi branch of ISIS) is located, currently has over a million IDPs. This has been the case since Mosul's liberation in mid-2017. Baghdad, Kirkuk, Salah al-Din and the Kurdish governorates of Dahuk and Erbil have hosted a large number of IDPs throughout the crisis and continues to do so to the present. 
 
 
-## Where IDPs are Living
+# IDPs' Types of Residence
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ############# GRAPH 2: Most recent figures by governorate and shelter type 
 setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
 recent <- irq_idp %>%
   group_by(Date, Governorate) %>%
-  summarise(Camp = sum(Camp),
-            `Rented place` = sum(Rentedhouses), 
+  summarise(`Rented place` = sum(Rentedhouses), 
             `Host community` = sum(`Hostfamilies`),
             `Informal or unfinished settlement` = sum(Informalsettlements,Unfinishedbuilding),
             `Other` = sum(Other,Schoolbuilding, Religiousbuilding,`Hotel Motel`),
+             Camp = sum(Camp),
             `Unknown type`= sum(`Unknownsheltertype`)) %>%
   filter(Date == '2017-09-30')
 
@@ -195,23 +196,25 @@ recent_res <- melt(recent2, id.vars = c('Governorate'),
 
 recent_res$Governorate <- factor(recent_res$Governorate, levels=c('Anbar','Salah al-Din','Baghdad','Dahuk','Erbil','Sulaymaniyah','Ninewa','Kirkuk','Diyala','Najaf','Kerbala','Babylon', 'Basrah','Thi-Qar','Wassit','Missan', 'Muthanna', 'Qadissiya'))
 
+
+
 # graph
 ggplot(recent_res, aes(x=Governorate, y=Total, fill=Type)) + 
   geom_bar(stat="identity") +
-  scale_fill_manual(values = c("#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00","#B40F20")) +
+  scale_fill_manual(values = c("#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00","#96190E")) +
   ThemeMain +
   scale_y_continuous(labels = formatter1000) +
-  labs(title = "IDPs' Types of Residence",
-       subtitle = "Number of people living in each type of residence, disaggregated by governorate (as of September 2017) \nMost live in camps or rented spaces.",
+  labs(title = "Most in Ninewa live in camps or unknown types of housing",
+       subtitle = "In contrast, majority in stable areas live in rented spaces or with host communities",
        x = "Governorate", y = "Total Number of People (in Thousands)",
-       caption = 'Data from IOM (Iraq Mission)') 
+       caption = 'Data from IOM (Iraq Mission), as of September 2017') 
 ```
 
-IDPs live in different types of residences, depending on their situation. Most of the newly displaced people in Ninewa governorate live in camps or in an unknown housing type. Nearby Dahuk also has a sizeable camp population. In many of the more stable governorates, such as Erbil, Kirkuk, and Sulaymaniyah, IDPs live in rented homes.  
+IDPs live in different types of residences, depending on their situation. The overwhelming majority of the newly displaced people in Ninewa governorate live in camps or in an unknown housing type. Nearby Dahuk also has a sizeable camp population. In many of the more stable governorates, such as Erbil, Kirkuk, and Sulaymaniyah, IDPs live in rented homes or with host communities.  
 
 
 
-## The Geographical Spread of IDPs
+# The Geographical Spread of IDPs
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ############## MAP 2: camps and non-camps 
@@ -248,19 +251,19 @@ ggplot() +
         plot.title = element_text(face="bold", size=18),
         axis.title.y = element_blank(),
         axis.title.x = element_blank()) +
-  labs(title = "Spread of IDPs and Large Cities",
-       subtitle = "Non-camp IDPs are spread out, in-camp IDPs are clustered near large cities (as of September 2017).",
-       caption = 'Data from IOM (Iraq Mission)') +
+  labs(title = "IDP camps are clustered near large cities",
+       subtitle = "In contrast, non-camp IDPs are spread out over the country",
+       caption = 'Data from IOM (Iraq Mission), as of September 2017') +
   scale_size_continuous(name='People (in millions)', breaks = c(500000, 2000000, 3500000, 5000000),
                         labels = c(".5","2","3.5","5")) +
   coord_equal()
 ```
-Cities of over half a million people are depicted in red. The yellow and blue dots show where IDPs reside. Non-camp IDPs are spread out over the country, while camps are near (but not usually in) large cities. 
+The yellow and blue dots show where IDPs reside, and cities of over half a million people are depicted in red. Non-camp IDPs are spread out over the country, while camps are near (but not usually in) large cities. 
 
 
 
 
-## How Crowded are the Camps?
+# Population Density in the Camps
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ########## GRAPH 3: Most recent figures of size and density of camps by governorate 
 setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
@@ -276,13 +279,13 @@ dat.gg <- circleLayoutVertices(packing)
 
 dens <- camp_dens$camp_density
 dens_df <- data.frame(dens)
-colnames(dens_df) <- c('Camp Density')
+colnames(dens_df) <- c('Camp Density (ppl/camp)')
 dens_df$id <- 1:nrow(dens_df)
 dat.gg2 <- merge(dat.gg, dens_df, by="id", all.x=TRUE)
 
 
 ggplot(data=dat.gg2, aes(x,y)) +
-  geom_polygon(aes(group = id, fill = `Camp Density`), 
+  geom_polygon(aes(group = id, fill = `Camp Density (ppl/camp)`), 
                colour = "black", alpha = 0.7) +
   scale_fill_distiller(palette = 'YlOrRd', direction = 1) +
   geom_text(data = packing, aes(x, y, label = camp_dens$Governorate), size = 3, family='Garamond') +
@@ -290,15 +293,15 @@ ggplot(data=dat.gg2, aes(x,y)) +
   theme(text=element_text(family="Garamond"),
         plot.title = element_text(face="bold", size=18)) +
   coord_equal() +
-  labs(title = "IDPs Living in Camps",
-       subtitle = "This graphic depicts the total camp population and density per governorate. \nThe size of the circle represents the relative number of IDPs in camps, \nwhile the color shows the density (people per camp) of the camps. \n(as of September 2017)",
-       caption = 'Data from IOM (Iraq Mission)')
+  labs(title = "The most populated camps are also the most crowded",
+       subtitle = "Camps in Ninewa and Dahuk have the most IDPs (size of circle) and are the most crowded (shade of circle)",
+       caption = 'Data from IOM (Iraq Mission), as of September 2017')
 ```
 
-Conditions in IDP camps can vary greatly. We can see that places with the greatest number of IDPs living in camps also tend to have the densest camps. Again, Ninewa has the largest number of people living in camps, with the average density at fifteen-thousand people per camp. Dahuk and Anbar also have a sizeable camp population, with over ten-thousand people per camp. Other governorates have a much smaller number of people in camps, which tend to be much less crowded. 
+Conditions in IDP camps can vary greatly. Places with the greatest number of IDPs living in camps also tend to have the densest camps. Again, Ninewa has the largest number of people living in camps, with the average density at fifteen-thousand people per camp. Dahuk and Anbar also have a sizeable camp population, with over ten-thousand people per camp. Other governorates have a much smaller number of people in camps, which tend to be much less crowded. 
 
 
-## Humanitarian Funding in Iraq
+# Humanitarian Funding in Iraq
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ############## GRAPH 4: Funding Situation 
 setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
@@ -321,19 +324,19 @@ ggplot() +
              filter(name !='Iraq 2017'), aes(x=name, y=revisedRequirements, color=`Funding Requirements`),
            stat='Identity', fill = 'grey', alpha=.8) +
   geom_bar(data=funds, aes(x=Year, y=`Total Funding`, fill=`Funding Cluster`), stat = "Identity", size=0) +
-  scale_fill_manual(values = c("#35274A","#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00","#B40F20")) +
+  scale_fill_manual(values = c("#35274A","#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00","#96190E")) +
   scale_y_continuous(labels = format_mill) +
   ThemeMain +
-  labs(title = "Funding by Clusters and Needs, 2014 - 2016",
-       subtitle = "Amount of funds coming in per cluster against total funds needed. \nFunding remains at half of what is needed.",
+  labs(title = "Funding remains at half of what is needed",
+       subtitle = "Most funds go toward emergency needs, little go toward long-term nation-building",
        x = "Year", y = "Total Funds (in Millions of USD)",
        caption = 'Data from OCHA (Financial Tracking Service)')
 ```
-International funding remained at about half of the needs over the years (though this may be an underestimation because all inflowing funds may not have been captured in the data). Much of the funds go toward emergency needs, such as shelter and non-food items, every year. A steady stream of funds also go to health, protection, and sanitation each year. Unfortunately, education remains underfunded. 
+International funding remained at about half of the needs over the years. Much of the funds go toward emergency needs, such as shelter and non-food items, every year. A steady stream of funds also go to health, protection, and sanitation each year. Unfortunately, education remains underfunded. 
 
 
 
-## IDPs Returning Home
+# From IDP to Returnee
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ########## GRAPH 5: Returnees  
 setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
@@ -358,8 +361,8 @@ g <- ggplot() +
   scale_color_manual(values = c("#3B9AB2", "#78B7C5", "#EBCC2A", "#E1AF00", "#F21A00","#B40F20")) +
   scale_y_continuous(labels = formatter1000) +
   ThemeMain +
-  labs(title = "From IDP to Returnee, 2015 - 2017",
-       subtitle = "Number of people returning home, total and disaggregated by governorate \nMillions return home as the country is retaken.",
+  labs(title = "Millions return home as the country is retaken from ISIS",
+       subtitle = "Early crisis areas Anbar and Salah al-Din see the most returnees",
        x = "Year - Month", y = "Total Number of People (in Thousands)",
        caption = 'Data from IOM (Iraq Mission)')
 
@@ -369,7 +372,7 @@ As parts of Iraq are liberated from ISIS control and are stablized, many IDPs ar
 
 
 
-## Iraqi Refugee Situation
+# Iraqi Refugees Around the World
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 ########## GRAPH 6: Refugee Situation 
 setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
@@ -390,74 +393,37 @@ irq_ref$`Destination type` <- ifelse(irq_ref$Destination %in% region, "Regional"
                            ifelse(irq_ref$Destination %in% europe, "Europe",
                                   ifelse(irq_ref$Destination %in% compare, "World", NA)))
 
+irq_ref_wr <- irq_timesr %>%
+  filter(`Population type` == 'Refugees' & Year == 2016) %>%
+  filter(!(Destination %in% region) & !(Destination %in% europe) & !(Destination %in% compare)) %>%
+  group_by(Year) %>%
+  summarise(Total_refugees = sum(Value))
+
+irq_ref_wr$Destination <- 'World-Elsewhere'
+irq_ref_wr$`Destination type` <- 'World'
+
+irq_ref_all <- bind_rows(irq_ref,  irq_ref_wr)
+
 # number of refugees by year
 irq_year <- irq_timesr %>% filter(`Population type`=='Refugees') %>%
   group_by(Year) %>%
   summarise(tot = sum(Value))
 
 # graph
-ggplot(irq_ref, aes(area = Total_refugees, fill = `Destination type`, label = Destination, subgroup = `Destination type`)) +
+ggplot(irq_ref_all, aes(area = Total_refugees, fill = `Destination type`, label = Destination, subgroup = `Destination type`)) +
   geom_treemap() +
   geom_treemap_subgroup_border() +
   theme(text=element_text(family="Garamond")) +
   geom_treemap_text(colour = "white", place = "topleft", reflow = T,family="Garamond") +
   scale_fill_manual(values = c("#78B7C5", "#E1AF00", "#F21A00")) +
-  theme(plot.title = element_text(face="bold", size=18)) +
-  labs(title = "Iraqi Refugees Around the World",
-     subtitle = "There are over 310,000 Iraqi refugees around the world. \nOver 250,000 of them reside in 10 key countries in Europe and the Middle East, \nwhile about 12,000 are in the US, UK, and Canada (as of 2016)",
-     caption = 'Data from UNHCR (Population Statistics)')
+  theme(plot.title = element_text(face="bold", size=16)) +
+  labs(title = "Iraqi refugees are concentrated in several key countries",
+     subtitle = "80% of Iraqi refugees reside in 10 key countries in Europe and the Middle East, \nwhile less than 5% live in the US, UK, and Canada",
+     caption = 'Data from UNHCR (Population Statistics), as of 2016')
 ```
-The vast majority of Iraqi refugees are concentrated in several key countries in the Middle East and in Europe. Germany and Turkey, in particular, host an increasingly large number of Iraqi refugees. In contrast, world powers that are further away from the crisis host comparitively fewer refugees. 
+Over 250,000 of the 310,000 Iraqi refugees around the world reside in 10 key countries in Europe and the Middle East. Germany and Turkey, in particular, host an increasingly large number of Iraqi refugees. In contrast, world powers that are further away from the crisis host comparitively fewer refugees; the US, UK, and Canada together host only 12,000 as of 2016.
+
+  
 
 
 
-## Iraqi Asylumn Application Situation
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-############# GRAPH 7: Asylum Seekers
-setwd('C:/Users/Sun-joo Lee/Git_Projects/Data_Viz_Fall17/')
-irq_asy_decision <- read_csv('HW4/unhcr_popstats_export_asylum_seekers_2017_10_22_065726.csv')
-irq_asy_decision$`Total pending start-year` <- as.integer(irq_asy_decision$`Total pending start-year`)
-irq_asy_decision$`Applied during year` <- as.integer(irq_asy_decision$`Applied during year`)
-irq_asy_decision$`decisions_recognized` <- as.integer(irq_asy_decision$`decisions_recognized`)
-irq_asy_decision$`decisions_other` <- as.integer(irq_asy_decision$`decisions_other`)
-irq_asy_decision$`Rejected` <- as.integer(irq_asy_decision$`Rejected`)
-irq_asy_decision$`Otherwise closed` <- as.integer(irq_asy_decision$`Otherwise closed`)
-irq_asy_decision$`Total decisions` <- as.integer(irq_asy_decision$`Total decisions`)
-irq_asy_decision$`Total pending end-year` <- as.integer(irq_asy_decision$`Total pending end-year`)
-
-# Asylum - filtered
-irq_asy <- irq_asy_decision %>%
-  filter(Destination %in% region | Destination %in% europe | Destination %in% compare) %>%
-  group_by(Year, Destination) %>%
-  summarize(`Total Apps` = sum(`Total pending start-year` + `Applied during year`),
-            Recognized = sum(decisions_recognized), Rejected = sum(Rejected), 
-            Other = sum(`Otherwise closed` + decisions_other),
-            Pending = sum(`Total pending end-year`)) %>%
-  arrange(Year, `Total Apps`)
-
-irq_asy$Destination_type <- ifelse(irq_asy$Destination %in% region, "Regional",
-                                   ifelse(irq_asy$Destination %in% europe, "Europe",
-                                          ifelse(irq_asy$Destination %in% compare, "World", NA)))
-
-#graph
-irq_asy_melt <- melt(irq_asy, id.vars = c('Year','Destination', 'Destination_type'), 
-                       variable.name = 'Outcome', value.name = 'Number')
-
-irq_asy_gr <- irq_asy_melt %>% filter(Outcome != 'Total Apps')
-
-irq_asy_gr$Outcome <- factor(irq_asy_gr$Outcome,levels = c('Pending','Rejected','Other','Recognized'))
-irq_asy_gr$Destination <- factor(irq_asy_gr$Destination, levels=c('Syria','Lebanon', 'Jordan', 'Turkey', 'Germany','Sweden','Finland','Netherlands','Greece','US','UK','Canada','Saudi Arabia'))
-
-ggplot() +
-  geom_bar(data = irq_asy_gr %>% filter(Year == 2016), aes(x=Destination, y=Number, fill=Outcome), stat='Identity', alpha = .85) +
-  scale_fill_manual(values = c("#3B9AB2", "#78B7C5", "#E1AF00", "#F21A00")) +
-  scale_y_continuous(labels = formatter1000) +
-  theme_light() +
-  ThemeMain +
-  labs(title = "Iraqi Refugees Asylum Seekers' Status",
-       subtitle = "This graph shows the number of asylum seekers and their status at the end of 2016. \nOnly a fraction are recognized and many remain in 'pending' status.",
-       x = "Country", y = "Number of People (in Thousands)",
-       caption = 'Data from UNHCR (Population Statistics)')
-
-```
-Asylum seekers are those who have sought international protection and whose claims for refugee status have not yet been determined. As the number of asylum applicants increase over the years, the majority remain in 'limbo' as world governments struggle to process all the applications. Turkey, which had the highest number of applicants last year, was only able to process a fraction and accept (recognize) an even smaller propotion. Germany was able to process a little over half of the applications last year. 
